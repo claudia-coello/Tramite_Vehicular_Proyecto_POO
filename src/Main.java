@@ -5,7 +5,7 @@ public class Main {
 
         String hash = BCrypt.hashpw("1234", BCrypt.gensalt(10));
 
-        if (BCrypt.checkpw(hash))
-        System.out.printf(hash);
+        if (BCrypt.checkpw("1234",hash))
+            System.out.printf("Clave original: 1234, su hash " + hash);
     }
 }
