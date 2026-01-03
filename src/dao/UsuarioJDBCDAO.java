@@ -1,11 +1,14 @@
 package dao;
+
+import util.Conexion;
+
 import javax.swing.*;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
-import config.Conexion;
-public class usuarioDAO {
-
-    public static void crearUsuario(String nombre, String clave){
+public class UsuarioJDBCDAO implements UsuarioDAO{
+    public void crearUsuario(String nombre, String clave){
         String crear = "INSERT INTO usuarios(nombre_usuario, clave_usuario) VALUES (?, ?)";
 
         try(Connection con = Conexion.getConection(); PreparedStatement pstm = con.prepareStatement(crear) ){
@@ -19,5 +22,4 @@ public class usuarioDAO {
             e.printStackTrace();
         }
     }
-
 }

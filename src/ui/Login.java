@@ -1,6 +1,7 @@
 package ui;
 
-import dao.usuarioDAO;
+import dao.UsuarioDAO;
+import dao.UsuarioJDBCDAO;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -33,8 +34,8 @@ public class Login extends JFrame {
         crearUsuario.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                new usuarioDAO();
-                usuarioDAO.crearUsuario("Claudia Coello", "1234");
+                new UsuarioJDBCDAO();
+                //UsuarioJDBCDAO.crearUsuario("Claudia Coello", "1234");
             }
         });
     }
