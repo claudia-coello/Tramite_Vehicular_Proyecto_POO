@@ -5,7 +5,7 @@ import java.util.Date;
 
 public class Tramite {
     private int idTramite;
-    private int idSolicitante;
+    private Solicitante solicitante;
     private EstadoTramite estado;
     private boolean requisitoMedico;
     private boolean requisitoPago;
@@ -14,8 +14,8 @@ public class Tramite {
     private String createdBy;
     private Date createdAt;
 
-    public Tramite(int idSolicitante) {
-        this.idSolicitante = idSolicitante;
+    public Tramite(Solicitante solicitante) {
+        this.solicitante = solicitante;
         this.estado = EstadoTramite.PENDIENTE;
         this.fechaSolicitud = LocalDate.now();
     }
@@ -28,12 +28,12 @@ public class Tramite {
         this.idTramite = idTramite;
     }
 
-    public int getIdSolicitante() {
-        return idSolicitante;
+    public Solicitante getSolicitante() {
+        return solicitante;
     }
 
-    public void setIdSolicitante(int idSolicitante) {
-        this.idSolicitante = idSolicitante;
+    public void setSolicitante(Solicitante solicitante) {
+        this.solicitante = solicitante;
     }
 
     public EstadoTramite getEstado() {
