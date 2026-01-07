@@ -11,8 +11,10 @@ public class Usuario {
     public Usuario() {
     }
 
-    public Usuario(String username, Rol rol) {
+    public Usuario(String nombre, String username, String passwordHash, Rol rol) {
+        this.nombre = nombre;
         this.username = username;
+        this.passwordHash = passwordHash;
         this.rol = rol;
         this.estado = EstadoUsuario.ACTIVO;
     }

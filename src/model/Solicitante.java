@@ -1,18 +1,21 @@
 package model;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 public class Solicitante {
     private int idSolicitante;
     private String cedula;
     private String nombreSolicitante;
-    private Date fechaNacimiento;
+    private LocalDate fechaNacimiento;
     private TipoLicencia tipoLicencia;
 
     public Solicitante(){}
-    public Solicitante(String cedula, String nombreSolicitante, String apellido) {
+    public Solicitante(String cedula, String nombreSolicitante, LocalDate fechaNacimiento, TipoLicencia tipoLicencia) {
         this.cedula = cedula;
         this.nombreSolicitante = nombreSolicitante;
+        this.fechaNacimiento = fechaNacimiento;
+        this.tipoLicencia = tipoLicencia;
     }
 
     public String getCedula() {
@@ -47,11 +50,11 @@ public class Solicitante {
         this.tipoLicencia = tipoLicencia;
     }
 
-    public Date getFechaNacimiento() {
+    public LocalDate getFechaNacimiento() {
         return fechaNacimiento;
     }
 
-    public void setFechaNacimiento(Date fechaNacimiento) {
+    public void setFechaNacimiento(LocalDate fechaNacimiento) {
         this.fechaNacimiento = fechaNacimiento;
     }
 }

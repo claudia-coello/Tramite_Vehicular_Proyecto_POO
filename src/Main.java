@@ -1,11 +1,23 @@
+import dao.ExamenJDBCDAO;
+import dao.TramiteJBDCDAO;
+import dao.UsuarioJDBCDAO;
+import model.*;
 import util.Conexion;
 import org.mindrot.jbcrypt.BCrypt;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 public class Main {
     public static void main(String[] args) {
 
-        String hash = BCrypt.hashpw("1234", BCrypt.gensalt(10));
+        Tramite t = new Tramite();
+        t.setIdTramite(1);
+        Examen e = new Examen(t, 10.5, 14.8);
 
-        if (BCrypt.checkpw("1234",hash))
-            System.out.printf("Clave original: 1234, su hash " + hash);
+        ExamenJDBCDAO ex = new ExamenJDBCDAO();
+
+        ex.buscarExamenPorIdTramite(1);
+
     }
 }

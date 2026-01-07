@@ -14,6 +14,8 @@ public class Tramite {
     private String createdBy;
     private Date createdAt;
 
+    public Tramite(){}
+
     public Tramite(Solicitante solicitante) {
         this.solicitante = solicitante;
         this.estado = EstadoTramite.PENDIENTE;

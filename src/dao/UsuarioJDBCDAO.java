@@ -14,7 +14,7 @@ import util.Conexion;
 public class UsuarioJDBCDAO implements UsuarioDAO{
     @Override
     public void crearUsuario(Usuario usuario){
-        String crear = "INSERT INTO usuarios(nombre, ussername, password_hash, rol, estado) VALUES (?, ?, ?, ?, ?)";
+        String crear = "INSERT INTO usuarios(nombre, username, password_hash, rol, estado) VALUES (?, ?, ?, ?, ?)";
 
         try(Connection con = Conexion.getConection(); PreparedStatement pstm = con.prepareStatement(crear) ){
             pstm.setString(1, usuario.getNombre());
@@ -27,26 +27,29 @@ public class UsuarioJDBCDAO implements UsuarioDAO{
             JOptionPane.showMessageDialog(null, "Usuario creado con exito");
 
         }catch(SQLException e){
-            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error", e.getMessage(), JOptionPane.ERROR_MESSAGE);
         }
     }
 
     @Override
     public Usuario buscarPorUsername(String username) {
-        String buscar = "SELECT * FROM usuario WHERE username = ?";
+        String buscar = "SELECT * FROM usuarios WHERE username = ?";
         try(Connection conn = Conexion.getConection(); PreparedStatement pstm = conn.prepareStatement(buscar)){
             pstm.setString(1, username);
             ResultSet rs = pstm.executeQuery();
 
             if (rs.next()){
                 Usuario u = new Usuario();
-                u.setUsername("id");
+                u.setIdUsuario(rs.getInt("id"));
                 u.setNombre("nombre");
                 u.setUsername("username");
                 u.setPasswordHash("password_hash");
                 u.setRol(Rol.valueOf(rs.getString("rol")));
                 u.setEstado(EstadoUsuario.valueOf(rs.getString("estado")));
+
+                JOptionPane.showMessageDialog(null, "Coincidencia: " + u.getIdUsuario());
             }
+
 
         }catch (SQLException e){
             JOptionPane.showMessageDialog(null, "Error", e.getMessage(), JOptionPane.ERROR_MESSAGE);
@@ -57,7 +60,7 @@ public class UsuarioJDBCDAO implements UsuarioDAO{
 
     @Override
     public void actualizarEstadoUsuario(int id, EstadoUsuario estado) {
-        String actualizar = "UPDATE usuario SET estado = ? WHERE id = ?";
+        String actualizar = "UPDATE usuarios SET estado = ? WHERE id = ?";
         try(Connection conn = Conexion.getConection(); PreparedStatement pstm = conn.prepareStatement(actualizar)) {
             pstm.setString(1, estado.name());
             pstm.setInt(2, id);

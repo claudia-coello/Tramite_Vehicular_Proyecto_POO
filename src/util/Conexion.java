@@ -14,7 +14,6 @@ public class Conexion {
             if (con == null){
                 throw new ConexionFallidaException("No se pudo establecer una conexion exitosa con la base de datos");
             }
-            JOptionPane.showMessageDialog(null, "Conexion exitosa");
         }catch(SQLException e){
             JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }catch(ConexionFallidaException e){
