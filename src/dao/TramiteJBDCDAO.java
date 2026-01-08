@@ -8,8 +8,10 @@ import util.Conexion;
 import javax.swing.*;
 import java.sql.*;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
-public class TramiteJBDCDAO implements TramiteDao{
+public class TramiteJBDCDAO implements TramiteDAO {
     @Override
     public void crearTramite(Tramite tramite) {
         String crear = "INSERT INTO tramites(solicitante_id) values(?)";//es el unico que realmente necesitamos poner, el resto es automatico en la bd
@@ -18,7 +20,7 @@ public class TramiteJBDCDAO implements TramiteDao{
             pstm.executeUpdate();
 
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Error", e.getMessage(), JOptionPane.ERROR_MESSAGE);
+            throw new RuntimeException("Error al crear trámite", e);
         }
     }
 
@@ -50,7 +52,7 @@ public class TramiteJBDCDAO implements TramiteDao{
             }
 
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Error", e.getMessage(), JOptionPane.ERROR_MESSAGE);
+            throw new RuntimeException("Error al encontrar trámite", e);
         }
         return null;
     }
@@ -63,8 +65,68 @@ public class TramiteJBDCDAO implements TramiteDao{
             stm.setInt(2, id);
 
             stm.executeUpdate();
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Error", e.getMessage(), JOptionPane.ERROR_MESSAGE);
+        }
+        catch (SQLException e) {
+            throw new RuntimeException("Error al actualizar trámite", e);
         }
     }
+
+    @Override
+    public List<Tramite> listarTramites() {
+        List<Tramite> lista = new ArrayList<>();
+        String listar = "Select * from tramites";
+        try(Connection conn = Conexion.getConection();
+            PreparedStatement pstm = conn.prepareStatement(listar);) {
+
+            ResultSet rs = pstm.executeQuery();
+            while (rs.next()){
+                Tramite t = new Tramite();
+
+                Solicitante s = new Solicitante();
+                s.setIdSolicitante(rs.getInt("solicitante_id"));
+
+                t.setIdTramite(rs.getInt("id"));
+                t.setFechaSolicitud(rs.getDate("fecha_solicitud").toLocalDate());
+                t.setEstado(EstadoTramite.valueOf(rs.getString("estado")));
+                t.setSolicitante(s);
+
+                lista.add(t);
+            }
+
+        }catch (SQLException e) {
+            throw new RuntimeException("Error al listar trámites", e);
+        }
+        return lista;
+    }
+
+    @Override
+    public List<Tramite> listarTramitesPorEstado(EstadoTramite estado) {
+        String listar = "Select * from tramites where estado = ?";
+        List<Tramite> tramites = new ArrayList<>();
+
+        try(Connection conn = Conexion.getConection(); PreparedStatement pstm = conn.prepareStatement(listar)){
+            pstm.setString(1, estado.toString());
+
+            ResultSet rs = pstm.executeQuery();
+
+            while (rs.next()){
+                Tramite t = new Tramite();
+
+                Solicitante s = new Solicitante();
+                s.setIdSolicitante(rs.getInt("solicitante_id"));
+
+                t.setIdTramite(rs.getInt("id"));
+                t.setFechaSolicitud(rs.getDate("fecha_solicitud").toLocalDate());
+                t.setEstado(EstadoTramite.valueOf(rs.getString("estado")));
+                t.setSolicitante(s);
+
+                tramites.add(t);
+            }
+        }catch (SQLException e ){
+            throw new RuntimeException("Error al listar trámites por estado", e);
+        }
+        return tramites;
+    }
+
+
 }

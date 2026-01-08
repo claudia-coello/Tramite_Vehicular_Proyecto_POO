@@ -1,6 +1,7 @@
 package service;
 
 import dao.UsuarioJDBCDAO;
+import exceptions.DatosIncompletosException;
 import model.Rol;
 import model.Usuario;
 import org.mindrot.jbcrypt.BCrypt;

@@ -2,8 +2,6 @@ package dao;
 
 import model.EstadoUsuario;
 import model.Rol;
-import org.mindrot.jbcrypt.BCrypt;
-import service.DatosIncompletosException;
 import util.Conexion;
 
 import javax.swing.*;
@@ -26,7 +24,7 @@ public class UsuarioJDBCDAO implements UsuarioDAO{
             JOptionPane.showMessageDialog(null, "Usuario creado con exito");
 
         }catch(SQLException e){
-            JOptionPane.showMessageDialog(null, "Error", e.getMessage(), JOptionPane.ERROR_MESSAGE);
+            throw new RuntimeException("Error al crear usuario", e);
         }
     }
 
@@ -49,7 +47,7 @@ public class UsuarioJDBCDAO implements UsuarioDAO{
 
 
         }catch (SQLException e){
-            JOptionPane.showMessageDialog(null, "Error", e.getMessage(), JOptionPane.ERROR_MESSAGE);
+            throw new RuntimeException("Error al buscar usuario por username", e);
         }
 
         return null;
@@ -65,7 +63,7 @@ public class UsuarioJDBCDAO implements UsuarioDAO{
             pstm.executeUpdate();
 
         }catch (SQLException e){
-            JOptionPane.showMessageDialog(null, "Error", e.getMessage(), JOptionPane.ERROR_MESSAGE);
+            throw new RuntimeException("Error al actualizar estado de usuario", e);
         }
     }
 
@@ -79,7 +77,7 @@ public class UsuarioJDBCDAO implements UsuarioDAO{
             pstm.executeUpdate();
 
         }catch (SQLException e){
-            JOptionPane.showMessageDialog(null, "Error", e.getMessage(), JOptionPane.ERROR_MESSAGE);
+            throw new RuntimeException("Error al cambiar clave", e);
         }
     }
 }
