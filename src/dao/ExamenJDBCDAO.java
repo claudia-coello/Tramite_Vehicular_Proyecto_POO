@@ -28,7 +28,7 @@ public class ExamenJDBCDAO implements ExamenDAO{
     }
 
     @Override
-    public Tramite buscarExamenPorIdTramite(int idTramite) {
+    public Examen buscarExamenPorIdTramite(int idTramite) {
         String buscar = "select * from examenes where tramite_id=?";
 
         try(Connection conn = Conexion.getConection(); PreparedStatement pstm = conn.prepareStatement(buscar);) {
