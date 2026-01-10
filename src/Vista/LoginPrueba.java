@@ -6,7 +6,7 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
-public class Login extends JFrame {
+public class LoginPrueba extends JFrame {
     private JPanel panel1;
     private JLabel lblBienvenido;
     private JLabel lblUsuario;
@@ -20,7 +20,7 @@ public class Login extends JFrame {
     private Image logo;
     LoginControlador controller;
 
-    public Login() {
+    public LoginPrueba() {
         setSize(500, 200);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setTitle("Sistema de matriculación");
@@ -41,7 +41,7 @@ public class Login extends JFrame {
     }
 
     public void mostrarMensaje(String mensaje) {
-        JOptionPane.showMessageDialog(this, mensaje);
+        JOptionPane.showMessageDialog(null, mensaje);
     }
 
     public void cerrar() {

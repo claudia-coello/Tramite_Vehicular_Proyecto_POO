@@ -5,11 +5,11 @@ import Modelo.Clases.Usuario;
 import Modelo.Service.UsuarioService;
 import Vista.Login;
 
-public class LoginController {
+public class LoginControlador {
     private Login login;
     private UsuarioService usuarioService;
 
-    public LoginController(Login login){
+    public LoginControlador(Login login){
         this.login = login;
         this.usuarioService = new UsuarioService();
         //unimos la vista del login con este controlador
