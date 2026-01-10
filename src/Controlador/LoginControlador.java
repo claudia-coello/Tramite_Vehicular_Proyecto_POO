@@ -3,7 +3,10 @@ package Controlador;
 import Modelo.Clases.Rol;
 import Modelo.Clases.Usuario;
 import Modelo.Service.UsuarioService;
+import Vista.Formularios.FormularioUsuarios;
 import Vista.Login;
+import Vista.Menu.MenuAdministrador;
+import Vista.Menu.MenuAnalista;
 
 public class LoginControlador {
     private Login login;
@@ -29,7 +32,6 @@ public class LoginControlador {
             Usuario usuario = usuarioService.login(usuarioIngresado, claveIngresada);
             if (usuarioService.login(usuarioIngresado, claveIngresada) != null){
                 login.mostrarMensaje("Bienvido: " + usuarioIngresado);
-                login.cerrar();
                 cambiarVista(usuario);
             }
 
@@ -39,15 +41,15 @@ public class LoginControlador {
 
     }
     public void crearUsuario(){
-
+        login.cambiarVentana(new FormularioUsuarios());
     }
 
     public void cambiarVista(Usuario usuario){
         Rol rol = usuario.getRol();
 
         switch (rol){
-            case ANALISTA -> login.mostrarMensaje("Analista");
-            case ADMINISTRADOR -> login.mostrarMensaje("Admin");
+            case ANALISTA -> login.cambiarVentana(new MenuAnalista(usuario));
+            case ADMINISTRADOR -> login.cambiarVentana(new MenuAdministrador(usuario));
             default -> login.mostrarMensaje("Rol no encontrado");
         }
     }

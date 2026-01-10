@@ -1,9 +1,10 @@
-import Vista.LoginPrueba;
+import Controlador.LoginControlador;
+import Vista.Login;
 
 public class Main {
     public static void main(String[] args) {
-        LoginPrueba l = new LoginPrueba();
-
+        Login l = new Login();
+        new LoginControlador(l);
 
     }
 }

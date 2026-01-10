@@ -6,67 +6,54 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
-public class Login extends JFrame {
-    private JPanel panel1;
-    private JLabel lblBienvenido;
+public class Login extends BaseVistas {
+    private JTextField inputUsuario;
+    private JPasswordField inputClave;
+    private JButton btnIniciarSesion;
+    private JButton btnCrearUsuario;
     private JLabel lblUsuario;
     private JLabel lblClave;
-    private JTextField inputNombre;
-    private JPasswordField inputClave;
-    private JPanel panel2;
-    private JButton crearUsuario;
-    private JButton iniciarSesionButton;
 
-    private Image logo;
-    LoginControlador controller;
+    private LoginControlador controller;
 
     public Login() {
-        setSize(500, 200);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setTitle("Sistema de matriculación");
+        // Crear los componentes, deben ser instanciados con new
+        lblUsuario = new JLabel("Usuario:");
+        lblClave = new JLabel("Clave:");
+        inputUsuario = new JTextField();
+        inputClave = new JPasswordField();
+        btnIniciarSesion = new JButton("Iniciar sesión");
+        btnCrearUsuario = new JButton("Crear usuario");
 
-        panel1.setBorder(new EmptyBorder(1, 1, 1, 1));
+        // Panel principal
+        JPanel panel = new JPanel(new GridLayout(3, 2, 10, 10));
+        panel.setBorder(new EmptyBorder(10, 10, 0, 10));
+        panel.setBackground(Color.CYAN);
 
-        setContentPane(panel1);
-        setLocationRelativeTo(null);
-        setVisible(true);
+        panel.add(lblUsuario);
+        panel.add(inputUsuario);
+        panel.add(lblClave);
+        panel.add(inputClave);
+        panel.add(btnIniciarSesion);
+        panel.add(btnCrearUsuario);
+
+        setContentPane(panel);
+        FormatoVentana("Sistema matriculación", 400, 150);
+    }
+
+    public void setController(LoginControlador controlador) {
+        this.controller = controlador;
+
+        btnIniciarSesion.addActionListener(e -> controlador.iniciarSesion());
+        btnCrearUsuario.addActionListener(e -> controlador.crearUsuario());
     }
 
     public String getUsuario() {
-        return inputNombre.getText();
+        return inputUsuario.getText();
     }
 
     public String getClave() {
         return new String(inputClave.getPassword());
     }
-
-    public void mostrarMensaje(String mensaje) {
-        JOptionPane.showMessageDialog(this, mensaje);
-    }
-
-    public void cerrar() {
-        dispose();
-    }
-
-    public void setController(LoginControlador controller) {
-        this.controller = controller;
-
-        iniciarSesionButton.addActionListener(e -> controller.iniciarSesion());
-        crearUsuario.addActionListener(e -> controller.crearUsuario());
-    }
-    //poner imagen
-    private void createUIComponents() {
-        logo = new ImageIcon(
-                getClass().getClassLoader().getResource("img/logo.jpg")
-        ).getImage();
-
-
-        panel2 = new JPanel() {
-            @Override
-            protected void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                g.drawImage(logo, 0, 0, getWidth(), getHeight(), this);
-            }
-        };
-    }
 }
+
