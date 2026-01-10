@@ -1,25 +1,30 @@
 package Modelo.Service;
 
-import at.favre.lib.crypto.bcrypt.BCrypt;
+import Excepciones.DatosInexistentesException;
 import Modelo.Dao.UsuarioJDBCDAO;
 import Excepciones.DatosIncompletosException;
 import Modelo.Clases.Rol;
 import Modelo.Clases.Usuario;
+import org.mindrot.jbcrypt.BCrypt;
 
 public class UsuarioService {
     private UsuarioJDBCDAO usuarioJDBC = new UsuarioJDBCDAO();
 
-    public boolean login(String usser, String clave){
+    public Usuario login(String usser, String clave){
         Usuario u = usuarioJDBC.buscarPorUsername(usser);
-        if (u == null) return false;
-        BCrypt.Result result = BCrypt.verifyer().verify(clave.toCharArray(), u.getPasswordHash());
-        return result.verified;
+        if (u == null) throw  new DatosInexistentesException("Usuario no encontrado");
+
+        boolean verificado = BCrypt.checkpw(clave, u.getPasswordHash());
+        if (!verificado){
+            throw new DatosInexistentesException("Clave incorrecta");
+        }
+        return u;
     }
 
     public void crearUsuario(String nombre, String usser, String clave, Rol rol){
         if (nombre == null || usser == null || clave == null || rol == null) throw new DatosIncompletosException("Datos del usuario incompletos");
 
-        String passwordHash = BCrypt.withDefaults().hashToString(10, clave.toCharArray());
+        String passwordHash = BCrypt.hashpw(clave, BCrypt.gensalt(10));
         Usuario u = new Usuario(nombre, usser, passwordHash, rol);
         usuarioJDBC.crearUsuarioJBDC(u);
     }
@@ -36,7 +41,8 @@ public class UsuarioService {
         Usuario usuarioEncontrado = usuarioJDBC.buscarPorUsername(usser);
         if (usuarioEncontrado == null) throw new IllegalArgumentException("Usuario no encontrado");
 
-        usuarioEncontrado.setPasswordHash(BCrypt.withDefaults().hashToString(10, claveNueva.toCharArray()));
+        String nuevoHash = BCrypt.hashpw(claveNueva, BCrypt.gensalt(10));
+        usuarioEncontrado.setPasswordHash(nuevoHash);
         usuarioJDBC.cambiarClave(usuarioEncontrado);
     }
 }

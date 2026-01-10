@@ -1,6 +1,0 @@
-package model;
-
-public enum Rol {
-    ADMINISTRADOR,
-    ANALISTA
-}

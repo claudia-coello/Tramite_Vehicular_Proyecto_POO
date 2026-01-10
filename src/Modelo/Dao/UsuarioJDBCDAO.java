@@ -31,16 +31,17 @@ public class UsuarioJDBCDAO implements UsuarioDAO{
     @Override
     public Usuario buscarPorUsername(String username) {
         String buscar = "SELECT * FROM usuarios WHERE username = ?";
+        Usuario u = new Usuario();
+
         try(Connection conn = Conexion.getConection(); PreparedStatement pstm = conn.prepareStatement(buscar)){
             pstm.setString(1, username);
             ResultSet rs = pstm.executeQuery();
 
             if (rs.next()){
-                Usuario u = new Usuario();
                 u.setIdUsuario(rs.getInt("id"));
-                u.setNombre("nombre");
-                u.setUsername("username");
-                u.setPasswordHash("password_hash");
+                u.setNombre(rs.getString("nombre"));
+                u.setUsername(rs.getString("username"));
+                u.setPasswordHash(rs.getString("password_hash"));
                 u.setRol(Rol.valueOf(rs.getString("rol")));
                 u.setEstado(EstadoUsuario.valueOf(rs.getString("estado")));
             }
@@ -50,7 +51,7 @@ public class UsuarioJDBCDAO implements UsuarioDAO{
             throw new RuntimeException("Error al buscar usuario por username", e);
         }
 
-        return null;
+        return u;
     }
 
     @Override

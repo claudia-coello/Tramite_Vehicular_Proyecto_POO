@@ -1,24 +1,24 @@
 package Vista;
 
-import Modelo.Dao.UsuarioJDBCDAO;
+import Controlador.LoginController;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class Login extends JFrame {
     private JPanel panel1;
     private JLabel lblBienvenido;
-    private JLabel lblNombre;
+    private JLabel lblUsuario;
     private JLabel lblClave;
     private JTextField inputNombre;
     private JPasswordField inputClave;
     private JPanel panel2;
     private JButton crearUsuario;
+    private JButton iniciarSesionButton;
 
     private Image logo;
+    LoginController controller;
 
     public Login() {
         setSize(500, 200);
@@ -30,17 +30,36 @@ public class Login extends JFrame {
         setContentPane(panel1);
         setLocationRelativeTo(null);
         setVisible(true);
-        crearUsuario.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                new UsuarioJDBCDAO();
-                //UsuarioJDBCDAO.crearUsuario("Claudia Coello", "1234");
-            }
-        });
     }
 
+    public String getUsuario() {
+        return inputNombre.getText();
+    }
+
+    public String getClave() {
+        return new String(inputClave.getPassword());
+    }
+
+    public void mostrarMensaje(String mensaje) {
+        JOptionPane.showMessageDialog(this, mensaje);
+    }
+
+    public void cerrar() {
+        dispose();
+    }
+
+    public void setController(LoginController controller) {
+        this.controller = controller;
+
+        iniciarSesionButton.addActionListener(e -> controller.iniciarSesion());
+        crearUsuario.addActionListener(e -> controller.crearUsuario());
+    }
+    //poner imagen
     private void createUIComponents() {
-        //logo = new ImageIcon(getClass().getResource("src/resources/img/logo.jpg")).getImage();
+        logo = new ImageIcon(
+                getClass().getClassLoader().getResource("img/logo.jpg")
+        ).getImage();
+
 
         panel2 = new JPanel() {
             @Override
