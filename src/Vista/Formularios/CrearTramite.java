@@ -2,5 +2,5 @@ package Vista.Formularios;
 
 import Vista.BaseVistas;
 
-public class Tramite extends BaseVistas {
+public class CrearTramite extends BaseVistas {
 }

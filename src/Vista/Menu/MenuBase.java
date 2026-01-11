@@ -1,6 +1,8 @@
 package Vista.Menu;
 
 import Controlador.MenuControlador;
+import Controlador.TramiteControlador;
+import Controlador.UsuarioControlador;
 import Modelo.Clases.Usuario;
 import Vista.BaseVistas;
 
@@ -8,60 +10,69 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
-import static javax.swing.SwingConstants.CENTER;
+public abstract class MenuBase extends BaseVistas {
 
-public class MenuBase extends BaseVistas {
-    private MenuControlador menuControlador;
-    private JButton btnRegistrarTramite;
-    private JButton btnListarTramites;
-    private JButton btnBuscarTramite;
-    private JButton btnActualizarTramite;
-    private JButton btnCambiarClave;
-    private JButton btnCerrarSesion;
-
-    protected JLabel lblBienvenido;
+    protected MenuControlador mControlador;
+    protected UsuarioControlador uControlador;
+    protected TramiteControlador tControlador;
 
     protected JPanel panelPrincipal;
     protected JPanel panelBotones;
+    protected JPanel panelInferior;
 
-    MenuControlador controlador;
+    protected JLabel lblBienvenido;
 
-    public MenuBase(Usuario usuario){
+    protected JButton btnRegistrarTramite;
+    protected JButton btnListarTramites;
+    protected JButton btnBuscarTramite;
+    protected JButton btnActualizarTramite;
+    protected JButton btnCambiarClave;
+    protected JButton btnCerrarSesion;
+
+    public MenuBase(Usuario usuario) {
+
         panelPrincipal = new JPanel(new BorderLayout(10, 10));
         panelPrincipal.setBorder(new EmptyBorder(10, 10, 10, 10));
 
-        lblBienvenido = new JLabel("Bienvenido: " + usuario.getUsername(), CENTER);
+        // 🔹 Parte superior
+        lblBienvenido = new JLabel("Bienvenido: " + usuario.getUsername(), SwingConstants.CENTER);
+        panelPrincipal.add(lblBienvenido, BorderLayout.NORTH);
 
+        // 🔹 Centro (botones)
         panelBotones = new JPanel(new GridLayout(0, 1, 5, 5));
 
         btnRegistrarTramite = new JButton("Registrar Trámite");
         btnListarTramites = new JButton("Listar Trámites");
         btnBuscarTramite = new JButton("Buscar Trámite");
         btnActualizarTramite = new JButton("Actualizar Trámite");
-        btnCambiarClave = new JButton("Cambiar Clave");
-        btnCerrarSesion = new JButton("Cerrar Sesión");
+        btnCambiarClave = new JButton("Cambiar mi clave");
 
         panelBotones.add(btnRegistrarTramite);
         panelBotones.add(btnListarTramites);
         panelBotones.add(btnBuscarTramite);
         panelBotones.add(btnActualizarTramite);
         panelBotones.add(btnCambiarClave);
-        panelBotones.add(btnCerrarSesion);
 
-        panelPrincipal.add(lblBienvenido, BorderLayout.NORTH);
         panelPrincipal.add(panelBotones, BorderLayout.CENTER);
+
+        // 🔹 Parte inferior
+        panelInferior = new JPanel();
+        btnCerrarSesion = new JButton("Cerrar sesión");
+        panelInferior.add(btnCerrarSesion);
+
+        panelPrincipal.add(panelInferior, BorderLayout.SOUTH);
 
         setContentPane(panelPrincipal);
     }
 
-    public void setControlador(MenuControlador controlador) {
-        this.controlador = controlador;
+    public void setControlador(MenuControlador mc, UsuarioControlador uc, TramiteControlador tc) {
+        this.mControlador = mc;
 
-        btnRegistrarTramite.addActionListener(e -> controlador.registrarTramite());
-        btnListarTramites.addActionListener(e -> controlador.listarTramites());
-        btnBuscarTramite.addActionListener(e -> controlador.buscarTramite());
-        btnActualizarTramite.addActionListener(e -> controlador.actualizarTramite());
-        btnCambiarClave.addActionListener(e -> controlador.cambiarClave());
-        btnCerrarSesion.addActionListener(e -> controlador.cerrarSesion());
+        btnRegistrarTramite.addActionListener(e -> tc.registrarTramite());
+        btnListarTramites.addActionListener(e -> tc.listarTramites());
+        btnBuscarTramite.addActionListener(e -> tc.buscarTramite());
+        btnActualizarTramite.addActionListener(e -> tc.actualizarTramite());
+        btnCambiarClave.addActionListener(e -> uc.cambiarClaveUsuario());
+        btnCerrarSesion.addActionListener(e -> mc.cerrarSesion());
     }
 }

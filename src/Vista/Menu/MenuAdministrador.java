@@ -1,25 +1,25 @@
 package Vista.Menu;
 
 import Controlador.MenuControlador;
+import Controlador.TramiteControlador;
+import Controlador.UsuarioControlador;
 import Modelo.Clases.Usuario;
 
 import javax.swing.*;
-import java.awt.*;
-import static javax.swing.SwingConstants.CENTER;
-import javax.swing.border.EmptyBorder;
 
-public class MenuAdministrador extends MenuBase{
+public class MenuAdministrador extends MenuBase {
+
     private JButton btnCrearUsuario;
     private JButton btnEditarUsuario;
     private JButton btnListarUsuarios;
     private JButton btnMostrarHistorial;
 
-    public MenuAdministrador(Usuario u){
+    public MenuAdministrador(Usuario u) {
         super(u);
 
         btnCrearUsuario = new JButton("Crear Usuario");
         btnEditarUsuario = new JButton("Editar Usuario");
-        btnListarUsuarios = new JButton("Listar Usuario");
+        btnListarUsuarios = new JButton("Listar Usuarios");
         btnMostrarHistorial = new JButton("Mostrar Historial");
 
         panelBotones.add(btnCrearUsuario);
@@ -27,31 +27,16 @@ public class MenuAdministrador extends MenuBase{
         panelBotones.add(btnListarUsuarios);
         panelBotones.add(btnMostrarHistorial);
 
-        panelPrincipal.add(panelBotones);
-
-        // Reorganizar el panel principal
-        panelPrincipal.removeAll(); // Limpiar todo
-        panelPrincipal.setLayout(new BorderLayout());
-
-        JLabel lblBienvenido = new JLabel("Bienvenido: " + u.getUsername());
-
-        panelPrincipal.add(lblBienvenido);
-        panelPrincipal.add(panelBotones, BorderLayout.CENTER);
-
-        FormatoVentana("Menu Administrador", 600, 400);
-
-        // Actualizar la interfaz
-        panelPrincipal.revalidate();
-        panelPrincipal.repaint();
-
+        FormatoVentana("Menú Administrador", 400, 450);
     }
 
-    public void setControlador(MenuControlador controlador) {
-        super.setControlador(controlador);
+    @Override
+    public void setControlador(MenuControlador mc, UsuarioControlador uc, TramiteControlador tc) {
+        super.setControlador(mc, uc, tc);
 
-        btnCrearUsuario.addActionListener(e -> controlador.crearUsuario());
-        btnEditarUsuario.addActionListener(e -> controlador.editarUsuario());
-        btnListarUsuarios.addActionListener(e -> controlador.listarUsuarios());
-        btnMostrarHistorial.addActionListener(e -> controlador.mostrarHistorial());
+        btnCrearUsuario.addActionListener(e -> uc.crearUsuario());
+        btnEditarUsuario.addActionListener(e -> uc.editarUsuario());
+        btnListarUsuarios.addActionListener(e -> uc.listarUsuarios());
+        btnMostrarHistorial.addActionListener(e -> mc.mostrarHistorial());
     }
 }

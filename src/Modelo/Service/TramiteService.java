@@ -41,7 +41,7 @@ public class TramiteService {
         validarId(id);
         Tramite t = tramiteDAO.buscarTramitePorId(id);
 
-        if (t == null) throw new IllegalArgumentException("Tramite no encontrado");
+        if (t == null) throw new IllegalArgumentException("CrearTramite no encontrado");
         return t;
     }
 
@@ -60,7 +60,7 @@ public class TramiteService {
         validarId(tramiteId);
         Examen e = examenDAO.buscarExamenPorIdTramite(tramiteId);
 
-        if (e == null ) throw  new DatosIncompletosException("Tramite no encontrado");
+        if (e == null ) throw  new DatosIncompletosException("CrearTramite no encontrado");
 
     }
 

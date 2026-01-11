@@ -6,7 +6,7 @@ import Vista.BaseVistas;
 import javax.swing.*;
 import java.awt.*;
 
-public class FormularioUsuarios extends BaseVistas {
+public class CrearUsuario extends BaseVistas {
     UsuarioControlador controlador;
 
     private JLabel lblNombres;
@@ -26,7 +26,8 @@ public class FormularioUsuarios extends BaseVistas {
     private JPanel panelInputs;
     private JPanel panelBotones;
 
-    public FormularioUsuarios(){
+    public CrearUsuario(){
+
         panel = new JPanel(new GridLayout(2, 1, 0, 10));
 
         panelInputs = new JPanel(new GridLayout(4, 2, 5, 5));
@@ -66,7 +67,6 @@ public class FormularioUsuarios extends BaseVistas {
 
         FormatoVentana("Registro nuevo usuario", 400, 300);
         setContentPane(panel);
-
     }
 
     public String getUsuario() {

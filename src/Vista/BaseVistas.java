@@ -20,8 +20,8 @@ public abstract class BaseVistas extends JFrame {
     }
 
     public void cambiarVentana(JFrame nueva){
-        nueva.setVisible(true);
         this.dispose();
+        nueva.setVisible(true);
     }
 
 }

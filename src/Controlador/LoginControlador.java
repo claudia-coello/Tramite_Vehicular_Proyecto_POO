@@ -3,7 +3,7 @@ package Controlador;
 import Modelo.Clases.Rol;
 import Modelo.Clases.Usuario;
 import Modelo.Service.UsuarioService;
-import Vista.Formularios.FormularioUsuarios;
+import Vista.Formularios.CrearUsuario;
 import Vista.Login;
 import Vista.Menu.MenuAdministrador;
 import Vista.Menu.MenuAnalista;
@@ -40,9 +40,11 @@ public class LoginControlador {
         }
 
     }
-    public void crearUsuario(){
-        login.cambiarVentana(new FormularioUsuarios());
+    public void crearUsuario() {
+        CrearUsuario fu = new CrearUsuario();
+        new UsuarioControlador(fu);   // ← ESTA LÍNEA ES OBLIGATORIA
     }
+
 
     public void cambiarVista(Usuario usuario){
         Rol rol = usuario.getRol();

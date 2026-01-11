@@ -1,25 +1,48 @@
 package Controlador;
 
+import Excepciones.DatosIncompletosException;
 import Modelo.Clases.Rol;
-import Modelo.Clases.Usuario;
 import Modelo.Service.UsuarioService;
-import Vista.Formularios.FormularioUsuarios;
+import Vista.Formularios.CrearUsuario;
+import Vista.Login;
+
+import javax.swing.*;
 
 public class UsuarioControlador {
-    private FormularioUsuarios fu;
+    private CrearUsuario fu;
     private UsuarioService usuarioService;
 
-    public UsuarioControlador(FormularioUsuarios fu){
+    public UsuarioControlador(CrearUsuario fu){
         this.fu = fu;
         this.usuarioService = new UsuarioService();
         this.fu.setController(this);
     }
 
     public void crearUsuario() {
-        usuarioService.crearUsuario(fu.getNombreCompleto(), fu.getUsuario(), fu.getClave(), Rol.ANALISTA);
+        try {
+            String nombreCompleto = fu.getNombreCompleto();
+            String usuario = fu.getUsuario();
+            String clave = fu.getClave();
+            Rol rol = Rol.ANALISTA;
+
+            if ((nombreCompleto == null || nombreCompleto.isBlank()) || (usuario == null || usuario.isBlank()) || (clave == null || clave.isBlank())) throw  new DatosIncompletosException("Porfavor llene todos los datos");
+            usuarioService.crearUsuario(nombreCompleto, usuario, clave, rol);
+
+        }catch (DatosIncompletosException d){
+            JOptionPane.showMessageDialog(null, d.getMessage());
+        }
+    }
+
+    public void editarUsuario() {
+    }
+
+    public void listarUsuarios() {
+    }
+
+    public void cambiarClaveUsuario() {
     }
 
     public void volver() {
-
+        fu.cambiarVentana(new Login());
     }
 }
