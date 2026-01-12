@@ -1,5 +1,7 @@
 package Modelo.Clases;
 
+import Modelo.Enums.TipoLicencia;
+
 import java.time.LocalDate;
 
 public class Solicitante {

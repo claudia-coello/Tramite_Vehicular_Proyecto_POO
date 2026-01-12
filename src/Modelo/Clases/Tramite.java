@@ -1,5 +1,7 @@
 package Modelo.Clases;
 
+import Modelo.Enums.EstadoTramite;
+
 import java.time.LocalDate;
 import java.util.Date;
 
@@ -93,4 +95,5 @@ public class Tramite {
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
     }
+
 }

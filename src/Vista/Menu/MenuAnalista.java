@@ -8,6 +8,5 @@ public class MenuAnalista extends MenuBase {
         FormatoVentana("Menu Analista", 500, 300);
         setContentPane(panelPrincipal);
 
-        FormatoVentana("Menu Administrador", 200, 200);
     }
 }

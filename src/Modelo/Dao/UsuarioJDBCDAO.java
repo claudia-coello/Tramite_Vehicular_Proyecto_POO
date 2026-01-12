@@ -1,84 +1,120 @@
 package Modelo.Dao;
 
-import Modelo.Clases.EstadoUsuario;
-import Modelo.Clases.Rol;
-import Modelo.Repositorio.Conexion;
-
-import javax.swing.*;
-import java.sql.*;
+import Excepciones.DatosIncompletosException;
+import Excepciones.DatosInexistentesException;
 import Modelo.Clases.Usuario;
+import Modelo.Enums.EstadoUsuario;
+import Modelo.Enums.Rol;
+import Modelo.Repositorio.Conexion;
+import org.mindrot.jbcrypt.BCrypt;
 
-public class UsuarioJDBCDAO implements UsuarioDAO{
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+
+public class UsuarioJDBCDAO implements UsuarioDAO {
+
     @Override
-    public void crearUsuarioJBDC(Usuario usuario){
-        String crear = "INSERT INTO usuarios(nombre, username, password_hash, rol, estado) VALUES (?, ?, ?, ?, ?)";
+    public void crearUsuario(Usuario u) {
+        String sql = "INSERT INTO usuarios(nombre, username, password_hash, rol, estado) VALUES (?,?,?,?,?)";
 
-        try(Connection con = Conexion.getConection(); PreparedStatement pstm = con.prepareStatement(crear) ){
-            pstm.setString(1, usuario.getNombre());
-            pstm.setString(2, usuario.getUsername());
-            pstm.setString(3, usuario.getPasswordHash());
-            pstm.setString(4, usuario.getRol().name());
-            pstm.setString(5, usuario.getEstado().name());
+        try (Connection c = Conexion.getConection();
+             PreparedStatement ps = c.prepareStatement(sql)) {
 
-            pstm.execute();
-            JOptionPane.showMessageDialog(null, "Usuario creado con exito");
+            ps.setString(1, u.getNombre());
+            ps.setString(2, u.getUsername());
+            ps.setString(3, u.getPasswordHash());
+            ps.setString(4, u.getRol().name());
+            ps.setString(5, u.getEstado().name());
 
-        }catch(SQLException e){
-            throw new RuntimeException("Error al crear usuario", e);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 
     @Override
     public Usuario buscarPorUsername(String username) {
-        String buscar = "SELECT * FROM usuarios WHERE username = ?";
-        Usuario u = new Usuario();
+        String sql = "SELECT * FROM usuarios WHERE username=?";
+        try (Connection c = Conexion.getConection();
+             PreparedStatement ps = c.prepareStatement(sql)) {
 
-        try(Connection conn = Conexion.getConection(); PreparedStatement pstm = conn.prepareStatement(buscar)){
-            pstm.setString(1, username);
-            ResultSet rs = pstm.executeQuery();
+            ps.setString(1, username);
+            ResultSet rs = ps.executeQuery();
 
-            if (rs.next()){
+            if (rs.next()) {
+                Usuario u = new Usuario();
                 u.setIdUsuario(rs.getInt("id"));
                 u.setNombre(rs.getString("nombre"));
                 u.setUsername(rs.getString("username"));
                 u.setPasswordHash(rs.getString("password_hash"));
                 u.setRol(Rol.valueOf(rs.getString("rol")));
                 u.setEstado(EstadoUsuario.valueOf(rs.getString("estado")));
+                return u;
             }
-
-
-        }catch (SQLException e){
-            throw new RuntimeException("Error al buscar usuario por username", e);
-        }
-
-        return u;
-    }
-
-    @Override
-    public void actualizarEstadoUsuario(int id, EstadoUsuario estado) {
-        String actualizar = "UPDATE usuarios SET estado = ? WHERE id = ?";
-        try(Connection conn = Conexion.getConection(); PreparedStatement pstm = conn.prepareStatement(actualizar)) {
-            pstm.setString(1, estado.name());
-            pstm.setInt(2, id);
-
-            pstm.executeUpdate();
-
-        }catch (SQLException e){
-            throw new RuntimeException("Error al actualizar estado de usuario", e);
+            return null;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 
     @Override
-    public void cambiarClave(Usuario usuario){
-        String actualizar = "UPDATE usuarios SET password_hash = ? WHERE username = ?";
-        try(Connection conn = Conexion.getConection(); PreparedStatement pstm = conn.prepareStatement(actualizar)) {
-            pstm.setString(1, usuario.getPasswordHash());
-            pstm.setString(2, usuario.getUsername());
+    public void editarUsuario(Usuario u) {
+        String sql = "UPDATE usuarios SET nombre=?, rol=?, estado=? WHERE username=?";
 
-            pstm.executeUpdate();
+        try (Connection c = Conexion.getConection();
+             PreparedStatement ps = c.prepareStatement(sql)) {
 
-        }catch (SQLException e){
-            throw new RuntimeException("Error al cambiar clave", e);
+            ps.setString(1, u.getNombre());
+            ps.setString(2, u.getRol().name());
+            ps.setString(3, u.getEstado().name());
+            ps.setString(4, u.getUsername());
+
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
+
+    @Override
+    public void cambiarClave(Usuario u) {
+        String sql = "UPDATE usuarios SET password_hash=? WHERE username=?";
+
+        try (Connection c = Conexion.getConection();
+             PreparedStatement ps = c.prepareStatement(sql)) {
+
+            ps.setString(1, u.getPasswordHash());
+            ps.setString(2, u.getUsername());
+
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public List<Usuario> listarUsuarios() {
+        List<Usuario> lista = new ArrayList<>();
+        String sql = "SELECT * FROM usuarios";
+
+        try (Connection c = Conexion.getConection();
+             PreparedStatement ps = c.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                Usuario u = new Usuario();
+                u.setIdUsuario(rs.getInt("id"));
+                u.setNombre(rs.getString("nombre"));
+                u.setUsername(rs.getString("username"));
+                u.setRol(Rol.valueOf(rs.getString("rol")));
+                u.setEstado(EstadoUsuario.valueOf(rs.getString("estado")));
+                lista.add(u);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return lista;
+    }
+
+
 }

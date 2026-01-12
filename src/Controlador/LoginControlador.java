@@ -1,9 +1,10 @@
 package Controlador;
 
-import Modelo.Clases.Rol;
+import Modelo.Enums.ModoFormularioUsuario;
+import Modelo.Enums.Rol;
 import Modelo.Clases.Usuario;
 import Modelo.Service.UsuarioService;
-import Vista.Formularios.CrearUsuario;
+import Vista.Formularios.FormularioUsuario;
 import Vista.Login;
 import Vista.Menu.MenuAdministrador;
 import Vista.Menu.MenuAnalista;
@@ -41,8 +42,8 @@ public class LoginControlador {
 
     }
     public void crearUsuario() {
-        CrearUsuario fu = new CrearUsuario();
-        new UsuarioControlador(fu);   // ← ESTA LÍNEA ES OBLIGATORIA
+        FormularioUsuario fu = new FormularioUsuario(ModoFormularioUsuario.CREAR);
+        new UsuarioControlador(fu);
     }
 
 

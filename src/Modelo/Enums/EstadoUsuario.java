@@ -1,4 +1,4 @@
-package Modelo.Clases;
+package Modelo.Enums;
 
 public enum EstadoUsuario {
     ACTIVO,

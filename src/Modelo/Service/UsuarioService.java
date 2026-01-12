@@ -1,48 +1,71 @@
 package Modelo.Service;
 
-import Excepciones.DatosInexistentesException;
-import Modelo.Dao.UsuarioJDBCDAO;
 import Excepciones.DatosIncompletosException;
-import Modelo.Clases.Rol;
+import Excepciones.DatosInexistentesException;
 import Modelo.Clases.Usuario;
+import Modelo.Dao.UsuarioJDBCDAO;
+import Modelo.Enums.EstadoUsuario;
+import Modelo.Enums.Rol;
 import org.mindrot.jbcrypt.BCrypt;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class UsuarioService {
-    private UsuarioJDBCDAO usuarioJDBC = new UsuarioJDBCDAO();
 
-    public Usuario login(String usser, String clave){
-        Usuario u = usuarioJDBC.buscarPorUsername(usser);
-        if (u == null) throw  new DatosInexistentesException("Usuario no encontrado");
+    private UsuarioJDBCDAO dao = new UsuarioJDBCDAO();
 
-        boolean verificado = BCrypt.checkpw(clave, u.getPasswordHash());
-        if (!verificado){
+    public void crearUsuario(String nombre, String username, String clave, Rol rol) {
+        if (nombre.isEmpty() || username.isEmpty() || clave.isEmpty())
+            throw new IllegalArgumentException("Datos incompletos");
+
+        String hash = BCrypt.hashpw(clave, BCrypt.gensalt());
+        Usuario u = new Usuario(nombre, username, hash, rol);
+        u.setEstado(EstadoUsuario.ACTIVO);
+
+        dao.crearUsuario(u);
+    }
+
+    public void editarUsuario(String username, String nombre, Rol rol, EstadoUsuario estado) {
+        Usuario u = dao.buscarPorUsername(username);
+        if (u == null) throw new IllegalArgumentException("Usuario no existe");
+
+        u.setNombre(nombre);
+        u.setRol(rol);
+        u.setEstado(estado);
+
+        dao.editarUsuario(u);
+    }
+
+    public void cambiarClave(String username, String nuevaClave) {
+        Usuario u = dao.buscarPorUsername(username);
+        if (u == null) throw new IllegalArgumentException("Usuario no existe");
+
+        u.setPasswordHash(BCrypt.hashpw(nuevaClave, BCrypt.gensalt()));
+        dao.cambiarClave(u);
+    }
+
+    public Usuario login(String username, String clave) {
+        if (username == null || clave == null)
+            throw new DatosIncompletosException("Datos incompletos");
+
+        Usuario u = dao.buscarPorUsername(username);
+
+        if (u == null)
+            throw new DatosInexistentesException("Usuario no encontrado");
+
+        if (!BCrypt.checkpw(clave, u.getPasswordHash()))
             throw new DatosInexistentesException("Clave incorrecta");
-        }
+
+        if (u.getEstado() != EstadoUsuario.ACTIVO)
+            throw new IllegalStateException("Usuario inactivo");
+
         return u;
     }
-
-    public void crearUsuario(String nombre, String usser, String clave, Rol rol){
-        if (nombre == null || usser == null || clave == null || rol == null) throw new DatosIncompletosException("Datos del usuario incompletos");
-
-        String passwordHash = BCrypt.hashpw(clave, BCrypt.gensalt(10));
-        Usuario u = new Usuario(nombre, usser, passwordHash, rol);
-        usuarioJDBC.crearUsuarioJBDC(u);
-    }
-
-    public Usuario buscarUsuarioPorUsser(String usser){
-        if (usser == null) throw new DatosIncompletosException("Usuario requerido");
-        return usuarioJDBC.buscarPorUsername(usser);
-
-    }
-
-    public void cambiarClave(String usser, String claveNueva){
-        if (usser == null || claveNueva == null) throw new DatosIncompletosException("Datos del usuario incompletos");
-
-        Usuario usuarioEncontrado = usuarioJDBC.buscarPorUsername(usser);
-        if (usuarioEncontrado == null) throw new IllegalArgumentException("Usuario no encontrado");
-
-        String nuevoHash = BCrypt.hashpw(claveNueva, BCrypt.gensalt(10));
-        usuarioEncontrado.setPasswordHash(nuevoHash);
-        usuarioJDBC.cambiarClave(usuarioEncontrado);
+    public List<Usuario> listarUsuarios(){
+        List<Usuario> u = new ArrayList<>();
+        u = dao.listarUsuarios();
+        if (u.isEmpty()) throw new DatosIncompletosException("No existen usuarios registrados");
+        return u;
     }
 }

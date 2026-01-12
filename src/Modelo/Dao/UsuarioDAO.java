@@ -1,11 +1,13 @@
 package Modelo.Dao;
+
 import Modelo.Clases.Usuario;
-import Modelo.Clases.EstadoUsuario;
+
+import java.util.List;
 
 public interface UsuarioDAO {
-    void crearUsuarioJBDC(Usuario usuario);
+    void crearUsuario(Usuario usuario);
     Usuario buscarPorUsername(String username);
-    void actualizarEstadoUsuario(int id, EstadoUsuario estado);
-
+    void editarUsuario(Usuario usuario);
     void cambiarClave(Usuario usuario);
+    List<Usuario> listarUsuarios();
 }

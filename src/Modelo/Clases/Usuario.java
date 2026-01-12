@@ -1,5 +1,8 @@
 package Modelo.Clases;
 
+import Modelo.Enums.EstadoUsuario;
+import Modelo.Enums.Rol;
+
 public class Usuario {
     private int idUsuario;
     private String username;
