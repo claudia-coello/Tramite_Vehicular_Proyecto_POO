@@ -10,7 +10,7 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
-public abstract class MenuBase extends BaseVistas {
+public class MenuBase extends BaseVistas {
 
     protected MenuControlador mControlador;
     protected UsuarioControlador uControlador;
@@ -34,11 +34,9 @@ public abstract class MenuBase extends BaseVistas {
         panelPrincipal = new JPanel(new BorderLayout(10, 10));
         panelPrincipal.setBorder(new EmptyBorder(10, 10, 10, 10));
 
-        // 🔹 Parte superior
         lblBienvenido = new JLabel("Bienvenido: " + usuario.getUsername(), SwingConstants.CENTER);
         panelPrincipal.add(lblBienvenido, BorderLayout.NORTH);
 
-        // 🔹 Centro (botones)
         panelBotones = new JPanel(new GridLayout(0, 1, 5, 5));
 
         btnRegistrarTramite = new JButton("Registrar Trámite");
@@ -55,7 +53,6 @@ public abstract class MenuBase extends BaseVistas {
 
         panelPrincipal.add(panelBotones, BorderLayout.CENTER);
 
-        // 🔹 Parte inferior
         panelInferior = new JPanel();
         btnCerrarSesion = new JButton("Cerrar sesión");
         panelInferior.add(btnCerrarSesion);
@@ -75,4 +72,5 @@ public abstract class MenuBase extends BaseVistas {
         btnCambiarClave.addActionListener(e -> uc.cambiarClaveUsuario());
         btnCerrarSesion.addActionListener(e -> mc.cerrarSesion());
     }
+
 }

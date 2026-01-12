@@ -2,7 +2,7 @@ package Vista;
 
 import javax.swing.*;
 
-public abstract class BaseVistas extends JFrame {
+public abstract class  BaseVistas extends JFrame {
     public void FormatoVentana(String titulo, int w, int h){
         setSize(w,h);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
