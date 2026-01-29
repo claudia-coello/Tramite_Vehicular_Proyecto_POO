@@ -41,18 +41,34 @@ public class LoginMenu extends BaseVistas{
         btnIniciarSesion.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (getUsuario().equals(usuario.getUsername())){
-
-                }
+                iniciarSesion();
             }
         });
         registrarseButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                CrearUsuarioFormulario uf = new CrearUsuarioFormulario(LoginMenu.this);
-                cerrarVentana();
+                crearUsuario();
             }
         });
+    }
+
+    private void iniciarSesion() {
+        if (controlador != null) {
+            controlador.iniciarSesion();
+        } else {
+            JOptionPane.showMessageDialog(this, "Controlador no configurado");
+        }
+    }
+
+    // Método para el botón registrarse
+    private void crearUsuario() {
+        if (controlador != null) {
+            controlador.crearUsuario();
+        } else {
+            // Fallback al método antiguo si no hay controlador
+            CrearUsuarioFormulario uf = new CrearUsuarioFormulario(this);
+            cerrarVentana();
+        }
     }
 
     public JTextField getInputUsuario() {

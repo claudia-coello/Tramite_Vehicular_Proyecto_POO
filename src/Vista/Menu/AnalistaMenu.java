@@ -50,4 +50,5 @@ public class AnalistaMenu extends BaseVistas {
         });
     }
 
+
 }

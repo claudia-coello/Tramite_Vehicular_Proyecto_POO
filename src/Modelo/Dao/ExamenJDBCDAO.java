@@ -35,15 +35,28 @@ public class ExamenJDBCDAO implements ExamenDAO{
         String buscar = "select * from examenes where tramite_id=?";
 
         try(Connection conn = Conexion.getConection(); PreparedStatement pstm = conn.prepareStatement(buscar)) {
-
             pstm.setInt(1, idTramite);
-            pstm.execute();
+            ResultSet rs = pstm.executeQuery();  // Solo agregué esto
+
+            if (rs.next()){
+                Examen e = new Examen();
+                e.setIdExamen(rs.getInt("id"));
+
+                Tramite t = new Tramite();
+                t.setIdTramite(rs.getInt("tramite_id"));
+                e.setTramite(t);
+
+                e.setNotaTeorica(rs.getDouble("nota_teorica"));
+                e.setNotaPractica(rs.getDouble("nota_practica"));
+                e.setResultado(rs.getBoolean("resultado"));
+
+                return e;
+            }
         }catch (SQLException e){
             throw new RuntimeException("Error al buscar examenes", e);
         }
         return null;
     }
-
     @Override
     public List<Examen> listarExamenes() {
         String listar = "Select * from examenes";

@@ -48,4 +48,12 @@ public class Licencia {
     public void setFechaEmision(LocalDate fechaEmision) {
         this.fechaEmision = fechaEmision;
     }
+
+    public TipoLicencia getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(TipoLicencia tipo) {
+        this.tipo = tipo;
+    }
 }

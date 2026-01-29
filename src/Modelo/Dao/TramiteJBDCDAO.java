@@ -27,12 +27,14 @@ public class TramiteJBDCDAO implements TramiteDAO {
     @Override
     public Tramite buscarTramitePorId(int id) {
         String buscar = """
-                SELECT t.id, t.fecha_solicitud, t.estado,
-                    s.id as solicitante_id, s.cedula, s.nombre
-                    FROM tramites t
-                    JOIN solicitantes s on t.solicitante_id = s.id
-                    WHERE t.id=?
-                """;
+        SELECT t.*, 
+            s.id as solicitante_id, s.cedula, s.nombre,
+            s.fecha_nacimiento, s.tipo_licencia
+        FROM tramites t
+        JOIN solicitantes s on t.solicitante_id = s.id
+        WHERE t.id=?
+        """;
+
         try(Connection conn = Conexion.getConection(); PreparedStatement stm = conn.prepareStatement(buscar)){
             stm.setInt(1, id);
             ResultSet rs = stm.executeQuery();
@@ -42,14 +44,22 @@ public class TramiteJBDCDAO implements TramiteDAO {
                 s.setIdSolicitante(rs.getInt("solicitante_id"));
                 s.setCedula(rs.getString("cedula"));
                 s.setNombreSolicitante(rs.getString("nombre"));
+                s.setFechaNacimiento(rs.getDate("fecha_nacimiento").toLocalDate());
+                s.setTipoLicencia(Modelo.Clases.TipoLicencia.valueOf(rs.getString("tipo_licencia")));
 
                 Tramite t = new Tramite();
                 t.setIdTramite(rs.getInt("id"));
                 t.setFechaSolicitud(rs.getDate("fecha_solicitud").toLocalDate());
                 t.setEstado(EstadoTramite.valueOf(rs.getString("estado")));
+                t.setRequisitoMedico(rs.getBoolean("req_medico"));
+                t.setRequisitoPago(rs.getBoolean("req_pago"));
+                t.setRequisitoMultas(rs.getBoolean("req_multas"));
+                t.setCreatedBy(rs.getString("created_by"));
+                t.setCreatedAt(rs.getTimestamp("created_at"));
+                t.setSolicitante(s);
 
+                return t;
             }
-
         } catch (SQLException e) {
             throw new RuntimeException("Error al encontrar trámite", e);
         }
@@ -96,6 +106,11 @@ public class TramiteJBDCDAO implements TramiteDAO {
             throw new RuntimeException("Error al listar trámites", e);
         }
         return lista;
+    }
+
+    @Override
+    public void actualizarRequisitosTramite(int id, boolean medico, boolean pago, boolean multas) {
+
     }
 
     @Override

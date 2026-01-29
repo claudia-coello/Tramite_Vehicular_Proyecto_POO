@@ -10,5 +10,6 @@ public interface TramiteDAO {
     Tramite buscarTramitePorId(int id);
     void actualizarEstadoTramite(int id, EstadoTramite estadoTramite);
     List<Tramite> listarTramites();
+    void actualizarRequisitosTramite(int id, boolean medico, boolean pago, boolean multas);
     List<Tramite> listarTramitesPorEstado(EstadoTramite estado);
 }
